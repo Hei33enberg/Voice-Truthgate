@@ -1,9 +1,9 @@
-# @mosadd/voicecheck
+# @mosadd/voice-truthgate
 
-**VoiceCheck by mosADD** — an MIT SDK for **voice-deepfake / synthetic-speech detection**.
+**Voice Truthgate by mosADD** — an MIT SDK for **voice-deepfake / synthetic-speech detection**.
 
 > 📖 New here? Read the repo's [`docs/ARCHITECTURE.md`](../../docs/ARCHITECTURE.md) for a plain-language
-> walkthrough, or try it live at **https://mosadd.com/voicecheck**.
+> walkthrough, or try it live at **https://mosadd.com/voice-truthgate**.
 
 It gives you a two-stage, **honest** signal:
 
@@ -18,13 +18,13 @@ No detector reliably beats ~85% on unseen modern TTS, and codec compression (Opu
 ## Usage
 
 ```ts
-import { analyzeVoiceCheck, createHeuristicDetector, createServerDetector } from "@mosadd/voicecheck";
+import { analyzeVoiceTruthgate, createHeuristicDetector, createServerDetector } from "@mosadd/voice-truthgate";
 
 // Decode your audio to mono PCM first (Float32Array at, e.g., 16 kHz).
 const payload = { samples, sampleRate: 16000 };
 
 // On-device only (instant, private):
-const quick = await analyzeVoiceCheck(payload);
+const quick = await analyzeVoiceTruthgate(payload);
 console.log(quick.band.label, quick.confidence, quick.disclaimer);
 
 // Hybrid (triage + server confirmation). You provide how the server is reached
@@ -33,14 +33,14 @@ const server = createServerDetector({
   analyze: async (p) => callYourModel(p), // → { confidence, modelVersion, reasons? }
   version: "your-model-v1",
 });
-const full = await analyzeVoiceCheck(payload, { detectors: [createHeuristicDetector(), server] });
+const full = await analyzeVoiceTruthgate(payload, { detectors: [createHeuristicDetector(), server] });
 // The server verdict wins when it answers; falls back to on-device if it fails.
 ```
 
-`analyzeVoiceCheck` always returns `{ available, confidence, band, reasons, detectorId, modelVersion, disclaimer, isSignalNotVerdict, verdicts }`. When nothing usable answers, `available` is `false` and the band is `uncertain` — **never** `likely-authentic`.
+`analyzeVoiceTruthgate` always returns `{ available, confidence, band, reasons, detectorId, modelVersion, disclaimer, isSignalNotVerdict, verdicts }`. When nothing usable answers, `available` is `false` and the band is `uncertain` — **never** `likely-authentic`.
 
 ## Building on the pluggable core
-This SDK is built on [`@mosadd/detection-sdk`](../detection-sdk) (`Detector` / `Verdict` / `runDetectors`, fail-open) and [`@mosadd/voice-analyzer-core`](../voice-analyzer-core) (the pure-TS heuristic). Add your own detectors (edge ONNX, watermark check, etc.) and pass them to `analyzeVoiceCheck`.
+This SDK is built on [`@mosadd/detection-sdk`](../detection-sdk) (`Detector` / `Verdict` / `runDetectors`, fail-open) and [`@mosadd/voice-analyzer-core`](../voice-analyzer-core) (the pure-TS heuristic). Add your own detectors (edge ONNX, watermark check, etc.) and pass them to `analyzeVoiceTruthgate`.
 
 ## License
 MIT © mosADD. Use freely, including commercially. Attribution appreciated. If you deploy a third-party server model, keep its own license/attribution.

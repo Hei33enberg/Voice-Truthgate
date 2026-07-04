@@ -10,8 +10,8 @@ import {
   SIGNAL_NOT_VERDICT_DISCLAIMER,
   createHeuristicDetector,
   createServerDetector,
-  analyzeVoiceCheck,
-  VOICECHECK_MODEL_CARD,
+  analyzeVoiceTruthgate,
+  VOICE_TRUTHGATE_MODEL_CARD,
   type VoicePayload,
 } from "../index";
 
@@ -60,28 +60,28 @@ describe("heuristicDetector", () => {
   });
 });
 
-describe("analyzeVoiceCheck (heuristic-only)", () => {
+describe("analyzeVoiceTruthgate (heuristic-only)", () => {
   it("always returns the disclaimer + signal-not-verdict flag", async () => {
-    const r = await analyzeVoiceCheck(humanPayload());
+    const r = await analyzeVoiceTruthgate(humanPayload());
     expect(r.disclaimer).toBe(SIGNAL_NOT_VERDICT_DISCLAIMER);
     expect(r.isSignalNotVerdict).toBe(true);
     expect(r.available).toBe(true);
   });
   it("ranks synthetic above human", async () => {
-    const human = await analyzeVoiceCheck(humanPayload());
-    const synth = await analyzeVoiceCheck(synthPayload());
+    const human = await analyzeVoiceTruthgate(humanPayload());
+    const synth = await analyzeVoiceTruthgate(synthPayload());
     expect(synth.confidence).toBeGreaterThan(human.confidence);
   });
 });
 
-describe("analyzeVoiceCheck (fusion: server authoritative)", () => {
+describe("analyzeVoiceTruthgate (fusion: server authoritative)", () => {
   it("server verdict overrides an on-device false-positive", async () => {
     // Heuristic scores the synth sample HIGH; the (fake) real model says authentic (0.1).
     const server = createServerDetector({
       analyze: async () => ({ confidence: 0.1, modelVersion: "voiceguard-test", reasons: ["real_model=0.10"] }),
       version: "voiceguard-test",
     });
-    const r = await analyzeVoiceCheck(synthPayload(), { detectors: [createHeuristicDetector(), server] });
+    const r = await analyzeVoiceTruthgate(synthPayload(), { detectors: [createHeuristicDetector(), server] });
     expect(r.detectorId).toBe("voiceguard-server");
     expect(r.confidence).toBeCloseTo(0.1, 5);
     expect(r.band.id).toBe("likely-authentic");
@@ -91,14 +91,14 @@ describe("analyzeVoiceCheck (fusion: server authoritative)", () => {
     const server = createServerDetector({
       analyze: async () => { throw new Error("server down"); },
     });
-    const r = await analyzeVoiceCheck(synthPayload(), { detectors: [createHeuristicDetector(), server] });
+    const r = await analyzeVoiceTruthgate(synthPayload(), { detectors: [createHeuristicDetector(), server] });
     expect(r.available).toBe(true);
     expect(r.detectorId).toBe("mosadd-heuristic");
   });
 
   it("returns available:false (band uncertain) when nothing usable answers", async () => {
     const server = createServerDetector({ analyze: async () => { throw new Error("down"); } });
-    const r = await analyzeVoiceCheck(synthPayload(), { detectors: [server] });
+    const r = await analyzeVoiceTruthgate(synthPayload(), { detectors: [server] });
     expect(r.available).toBe(false);
     expect(r.band.id).toBe("uncertain");
     expect(r.reasons).toContain("analysis_unavailable");
@@ -107,9 +107,9 @@ describe("analyzeVoiceCheck (fusion: server authoritative)", () => {
 
 describe("model card", () => {
   it("has honest limitations + a not-for-use list + MIT", () => {
-    expect(VOICECHECK_MODEL_CARD.license).toBe("MIT");
-    expect(VOICECHECK_MODEL_CARD.limitations.length).toBeGreaterThanOrEqual(3);
-    expect(VOICECHECK_MODEL_CARD.notForUse.length).toBeGreaterThanOrEqual(3);
-    expect(VOICECHECK_MODEL_CARD.disclaimerRequired).toBe(true);
+    expect(VOICE_TRUTHGATE_MODEL_CARD.license).toBe("MIT");
+    expect(VOICE_TRUTHGATE_MODEL_CARD.limitations.length).toBeGreaterThanOrEqual(3);
+    expect(VOICE_TRUTHGATE_MODEL_CARD.notForUse.length).toBeGreaterThanOrEqual(3);
+    expect(VOICE_TRUTHGATE_MODEL_CARD.disclaimerRequired).toBe(true);
   });
 });

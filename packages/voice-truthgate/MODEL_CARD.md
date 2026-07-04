@@ -1,4 +1,4 @@
-# Model Card — VoiceCheck by mosADD
+# Model Card — Voice Truthgate by mosADD
 
 **Version:** 0.1.0-alpha · **License:** MIT (this SDK) · server model VoiceGuard is Apache-2.0
 

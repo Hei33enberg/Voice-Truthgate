@@ -1,7 +1,7 @@
 /**
  * Machine-readable model card, consumed by the SDK, the hosted checker UI, and
  * the public /model-card page. Keep in sync with MODEL_CARD.md. Honesty about
- * limitations is a product requirement, not a footnote (see the VoiceCheck plan).
+ * limitations is a product requirement, not a footnote (see the Voice Truthgate plan).
  */
 export interface ModelCard {
   name: string;
@@ -18,8 +18,8 @@ export interface ModelCard {
   license: "MIT";
 }
 
-export const VOICECHECK_MODEL_CARD: ModelCard = {
-  name: "VoiceCheck by mosADD",
+export const VOICE_TRUTHGATE_MODEL_CARD: ModelCard = {
+  name: "Voice Truthgate by mosADD",
   version: "0.1.0-alpha",
   summary:
     "A two-stage voice-authenticity signal: an instant on-device heuristic triage " +

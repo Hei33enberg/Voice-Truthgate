@@ -1,6 +1,6 @@
-# VoiceCheck — how it's built
+# Voice Truthgate — how it's built
 
-A plain-language reference for **VoiceCheck**, the free "is this voice real or AI?" checker.
+A plain-language reference for **Voice Truthgate**, the free "is this voice real or AI?" checker.
 Written so you can understand the whole thing **without reading the code**. Engineers: the
 package/file map and "how to run & verify" sections at the bottom are for you.
 
@@ -9,13 +9,13 @@ package/file map and "how to run & verify" sections at the bottom are for you.
 ## 1. What it is (in one paragraph)
 
 AI can clone a human voice from a few seconds of audio. The whole voice-AI industry races
-to *generate* speech — almost nobody ships a good, free tool to *detect* it. VoiceCheck is
+to *generate* speech — almost nobody ships a good, free tool to *detect* it. Voice Truthgate is
 that tool. You record or upload a short clip and it tells you, honestly, whether the voice
 shows signs of being AI-generated. It's free, needs no account, and — the important part —
 **the audio never leaves your device**.
 
-Try it live: **https://mosadd.com/voicecheck** (with a plain-language explainer at
-`/voicecheck/how-it-works` and the honest limitations page at `/model-card`).
+Try it live: **https://mosadd.com/voice-truthgate** (with a plain-language explainer at
+`/voice-truthgate/how-it-works` and the honest limitations page at `/model-card`).
 
 ---
 
@@ -78,7 +78,7 @@ transport and no endpoint.
 ## 6. Honesty — a band, never a verdict
 
 A raw percentage would imply false precision on a genuinely uncertain problem. So a single
-place in the code ([`confidenceBands.ts`](../packages/voicecheck/src/confidenceBands.ts))
+place in the code ([`confidenceBands.ts`](../packages/voice-truthgate/src/confidenceBands.ts))
 turns the model's 0–1 score into **one of three bands**, and every result is shown with the
 same disclaimer:
 
@@ -99,7 +99,7 @@ bare true/false — when nothing usable answers, the result is `available: false
 
 ## 7. The optional server check (supported, off by default)
 
-The `@mosadd/voicecheck` pipeline accepts an **injectable** server detector: you supply how
+The `@mosadd/voice-truthgate` pipeline accepts an **injectable** server detector: you supply how
 your model is reached (a proxy, an edge function, a direct call — the SDK hard-codes
 nothing). It's designed to **fail open**: if the server is down, the on-device band still
 stands and never silently becomes "authentic". Until you inject one, everything is 100%
@@ -113,7 +113,7 @@ A small, **MIT-licensed** set of packages — reusable by anyone:
 
 | Package (`@mosadd/*`) | Role |
 |---|---|
-| [`voicecheck`](../packages/voicecheck) | The brains — turns a clip into a confidence band and always attaches the disclaimer. Fuses Stage 1 + Stage 2 (server wins when it answers; falls back to on-device; never to "authentic"). |
+| [`voice-truthgate`](../packages/voice-truthgate) | The brains — turns a clip into a confidence band and always attaches the disclaimer. Fuses Stage 1 + Stage 2 (server wins when it answers; falls back to on-device; never to "authentic"). |
 | [`voice-analyzer-core`](../packages/voice-analyzer-core) | The instant math-based check (Stage 1). |
 | [`detection-sdk`](../packages/detection-sdk) | A plug-in frame (`Detector` / `Verdict` / `runDetectors`, fail-open) so new detectors can be added without rewrites. |
 | [`threat-engine`](../packages/threat-engine) | Shared severity/scoring primitives (transitive dependency). |
@@ -122,10 +122,10 @@ A small, **MIT-licensed** set of packages — reusable by anyone:
 
 | Concern | File |
 |---|---|
-| Pipeline / fusion (band-first, fail-open) | `packages/voicecheck/src/pipeline.ts` |
-| The ONLY score→band+disclaimer mapping | `packages/voicecheck/src/confidenceBands.ts` |
-| Machine-readable model card | `packages/voicecheck/src/modelCard.ts` + `packages/voicecheck/MODEL_CARD.md` |
-| Stage-1 detector + injectable server detector | `packages/voicecheck/src/detectors/*` |
+| Pipeline / fusion (band-first, fail-open) | `packages/voice-truthgate/src/pipeline.ts` |
+| The ONLY score→band+disclaimer mapping | `packages/voice-truthgate/src/confidenceBands.ts` |
+| Machine-readable model card | `packages/voice-truthgate/src/modelCard.ts` + `packages/voice-truthgate/MODEL_CARD.md` |
+| Stage-1 detector + injectable server detector | `packages/voice-truthgate/src/detectors/*` |
 | Stage-1 DSP feature extraction + scorer | `packages/voice-analyzer-core/src/{extract,score}.ts` |
 | Deterministic sample synthesizers (for demos/tests) | `packages/voice-analyzer-core/src/synthesize.ts` |
 | Detector/Verdict pipeline + fail-open runner | `packages/detection-sdk/src/{pipeline,types}.ts` |
@@ -161,5 +161,5 @@ npm run example      # deterministic Node quick-check (human → green-ish, synt
 
 ## 12. Licensing
 
-MIT © mosADD for the VoiceCheck packages — free to use, including commercially; attribution
+MIT © mosADD for the Voice Truthgate packages — free to use, including commercially; attribution
 appreciated. Third-party attributions are in [`NOTICE`](../NOTICE).

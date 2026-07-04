@@ -1,20 +1,20 @@
 /**
- * VoiceCheck — browser demo.
+ * Voice Truthgate — browser demo.
  *
  * Record or upload a clip → decode to 16 kHz mono → show the instant heuristic
  * BAND → optionally download & run a real model IN THE BROWSER for a stronger,
  * authoritative band. Nothing is uploaded; everything runs on-device.
  *
  * This mirrors the production pattern with fresh MIT code. The instant band
- * uses `voicecheck-lite` (a teaching stand-in); a real app would use
- * @mosadd/voicecheck + @mosadd/voice-analyzer-core.
+ * uses `voice-truthgate-lite` (a teaching stand-in); a real app would use
+ * @mosadd/voice-truthgate + @mosadd/voice-analyzer-core.
  */
 import {
   SIGNAL_NOT_VERDICT_DISCLAIMER,
   bandForConfidence,
   heuristicScore,
   type Band,
-} from "./voicecheck-lite";
+} from "./voice-truthgate-lite";
 
 const TARGET_SR = 16000;
 const MODEL_ID = "as1605/Deepfake-audio-detection-V2";

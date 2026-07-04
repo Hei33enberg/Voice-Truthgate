@@ -2,9 +2,9 @@ import { runDetectors } from "@mosadd/detection-sdk";
 import type { Detector, Verdict } from "@mosadd/detection-sdk";
 import { createHeuristicDetector } from "./detectors/heuristicDetector";
 import { SIGNAL_NOT_VERDICT_DISCLAIMER, bandForConfidence, unavailableBand } from "./confidenceBands";
-import type { VoiceCheckResult, VoicePayload } from "./types";
+import type { VoiceTruthgateResult, VoicePayload } from "./types";
 
-export interface AnalyzeVoiceCheckOptions {
+export interface AnalyzeVoiceTruthgateOptions {
   /** Detectors to run. Default: [heuristic]. Pass [heuristic, server] for hybrid. */
   detectors?: Detector[];
   /** Per-detector timeout. Default 15000ms (generous for the server model). */
@@ -28,7 +28,7 @@ function topByConfidence(verdicts: Verdict[]): Verdict | undefined {
 }
 
 /**
- * Run the VoiceCheck pipeline and fuse the detector verdicts into one honest,
+ * Run the Voice Truthgate pipeline and fuse the detector verdicts into one honest,
  * band-first result.
  *
  * Fusion (NOT naive max-confidence): the SERVER model (non-local) is
@@ -38,10 +38,10 @@ function topByConfidence(verdicts: Verdict[]): Verdict | undefined {
  * nothing usable is available we return `available:false` (band = "uncertain",
  * NEVER "likely-authentic") — the tool must fail to "unknown", not to "safe".
  */
-export async function analyzeVoiceCheck(
+export async function analyzeVoiceTruthgate(
   payload: VoicePayload,
-  options: AnalyzeVoiceCheckOptions = {},
-): Promise<VoiceCheckResult> {
+  options: AnalyzeVoiceTruthgateOptions = {},
+): Promise<VoiceTruthgateResult> {
   const detectors = options.detectors ?? [createHeuristicDetector()];
   const localById = new Map(detectors.map((d) => [d.meta.id, d.meta.local]));
 

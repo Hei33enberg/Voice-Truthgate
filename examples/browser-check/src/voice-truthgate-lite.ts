@@ -1,10 +1,10 @@
 /**
- * voicecheck-lite — a tiny, SELF-CONTAINED illustration of the VoiceCheck
+ * voice-truthgate-lite — a tiny, SELF-CONTAINED illustration of the Voice Truthgate
  * band-first output, so this example runs with zero setup.
  *
  * The bands + disclaimer below are kept identical to the real package
- * (@mosadd/voicecheck → confidenceBands.ts). In a real app, import them from
- * @mosadd/voicecheck instead of copying — this copy exists only so the example
+ * (@mosadd/voice-truthgate → confidenceBands.ts). In a real app, import them from
+ * @mosadd/voice-truthgate instead of copying — this copy exists only so the example
  * has no dependency on the (not-yet-published) workspace packages.
  *
  * The `heuristicScore` here is a deliberately minimal stand-in for

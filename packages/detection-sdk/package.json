@@ -1,7 +1,7 @@
 {
   "name": "@mosadd/detection-sdk",
   "version": "0.1.0-alpha.0",
-  "description": "Pluggable detection pipeline — Detector / Signal / Verdict interfaces plus a fail-open runDetectors runner. The frame VoiceCheck's detectors plug into.",
+  "description": "Pluggable detection pipeline — Detector / Signal / Verdict interfaces plus a fail-open runDetectors runner. The frame Voice Truthgate's detectors plug into.",
   "keywords": [
     "detection",
     "pipeline",
@@ -29,10 +29,10 @@
   },
   "license": "MIT",
   "author": "mosADD",
-  "homepage": "https://mosadd.com/voicecheck",
+  "homepage": "https://mosadd.com/voice-truthgate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hei33enberg/voicecheck.git",
+    "url": "https://github.com/Hei33enberg/voice-truthgate.git",
     "directory": "packages/detection-sdk"
   },
   "publishConfig": {

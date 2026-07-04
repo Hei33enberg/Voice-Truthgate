@@ -16,7 +16,7 @@ This creates a markdown file here that gets committed with your PR.
 
 ## Releasing (maintainers)
 
-Releases are **deliberate**, not automatic (VoiceCheck must not publish an accuracy-bearing tool
+Releases are **deliberate**, not automatic (Voice Truthgate must not publish an accuracy-bearing tool
 before its benchmark). To cut a release:
 
 1. `npm run version-packages` — applies pending changesets, bumps versions, updates changelogs.

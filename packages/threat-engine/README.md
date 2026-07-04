@@ -2,7 +2,7 @@
 
 Small, dependency-free primitives for **deterministic threat scoring** and severity/action
 mapping. It's a shared building block of [`@mosadd/detection-sdk`](../detection-sdk) — most
-importantly it defines the `ThreatSeverity` type that VoiceCheck's confidence bands use.
+importantly it defines the `ThreatSeverity` type that Voice Truthgate's confidence bands use.
 
 **License:** MIT.
 

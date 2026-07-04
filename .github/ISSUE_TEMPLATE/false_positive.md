@@ -5,7 +5,7 @@ title: "[false-positive] "
 labels: false-positive, accuracy
 ---
 
-> VoiceCheck is a **signal, not a verdict** — it is expected to be wrong sometimes,
+> Voice Truthgate is a **signal, not a verdict** — it is expected to be wrong sometimes,
 > in both directions. These reports are genuinely useful for calibration. Thank you.
 
 **Which way did it get it wrong?**

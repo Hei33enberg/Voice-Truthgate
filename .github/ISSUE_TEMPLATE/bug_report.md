@@ -17,7 +17,7 @@ Steps or a minimal code snippet. If it involves audio, describe the clip
 without their consent.
 
 **Environment**
-- Package + version (e.g. `@mosadd/voicecheck@0.1.0-alpha.0`):
+- Package + version (e.g. `@mosadd/voice-truthgate@0.1.0-alpha.0`):
 - Runtime (browser + version / Node version):
 - OS:
 

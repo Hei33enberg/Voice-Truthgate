@@ -1,10 +1,10 @@
-# Contributing to VoiceCheck
+# Contributing to Voice Truthgate
 
 Thanks for your interest! Issues and pull requests are welcome.
 
 ## Where this code lives
 
-VoiceCheck is developed inside mosADD's main (private) monorepo and mirrored here
+Voice Truthgate is developed inside mosADD's main (private) monorepo and mirrored here
 as the public, MIT-licensed distribution. That means:
 
 - **This repo is the canonical home for the public packages.** PRs here are real —
@@ -17,7 +17,7 @@ as the public, MIT-licensed distribution. That means:
 
 - By contributing to the MIT packages in `packages/*`, you agree your contribution is
   licensed under the MIT License.
-- Keep the **honesty rails** intact. VoiceCheck deliberately never surfaces a bare
+- Keep the **honesty rails** intact. Voice Truthgate deliberately never surfaces a bare
   "REAL/FAKE" verdict — results are one of three confidence bands and always carry the
   "signal, not a verdict" disclaimer. PRs that weaken this (e.g. adding a boolean verdict,
   removing the disclaimer, or making accuracy claims) will be declined.

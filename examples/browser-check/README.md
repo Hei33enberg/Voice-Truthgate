@@ -1,6 +1,6 @@
 # browser-check
 
-A tiny Vite app showing the full VoiceCheck pattern **in the browser**:
+A tiny Vite app showing the full Voice Truthgate pattern **in the browser**:
 
 1. record from the mic or upload a clip,
 2. decode it to 16 kHz mono PCM,
@@ -25,10 +25,10 @@ Then open the printed local URL. Recording needs microphone permission and a sec
 ## Notes / honesty
 
 - This example is **self-contained** so it runs without the (not-yet-published) workspace
-  packages. The instant band uses `src/voicecheck-lite.ts` — a deliberately minimal
+  packages. The instant band uses `src/voice-truthgate-lite.ts` — a deliberately minimal
   **teaching stand-in**, not the production heuristic. The real, honest heuristic is
   [`@mosadd/voice-analyzer-core`](../../packages/voice-analyzer-core), and the real fusion +
-  band/disclaimer logic is [`@mosadd/voicecheck`](../../packages/voicecheck). Once those are
+  band/disclaimer logic is [`@mosadd/voice-truthgate`](../../packages/voice-truthgate). Once those are
   on npm, swap the lite module for them.
 - The bands and the "signal, not a verdict" disclaimer here are kept identical to the real
   package. Results are a **signal, not a verdict** — see the repository's model cards for the

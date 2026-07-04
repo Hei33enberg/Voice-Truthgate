@@ -3,7 +3,7 @@
 Pure-TypeScript, deterministic voice-deepfake **feature extractor + heuristic scorer**.
 No DOM, no Web Audio, no FFT library — it runs identically in the browser, React Native,
 edge runtimes and Node. It's Stage 1 (the instant, on-device triage) of
-[`@mosadd/voicecheck`](../voicecheck).
+[`@mosadd/voice-truthgate`](../voice-truthgate).
 
 **License:** MIT.
 
@@ -16,7 +16,7 @@ another shows "0.06 fine" for the exact same audio. This package is the single,
 deterministic source of that score.
 
 It is a **heuristic**, not a trained anti-spoof model: a fast, transparent triage floor.
-For an authoritative verdict, pair it with a trained model via `@mosadd/voicecheck`'s
+For an authoritative verdict, pair it with a trained model via `@mosadd/voice-truthgate`'s
 injectable server detector.
 
 ## API

@@ -1,6 +1,6 @@
 name: Release
 
-# Deliberate, manual-only publish. VoiceCheck must NOT publish an accuracy-bearing
+# Deliberate, manual-only publish. Voice Truthgate must NOT publish an accuracy-bearing
 # tool before its benchmark, so this never fires automatically on push. A maintainer
 # triggers it (Actions -> Release -> Run workflow) once a version bump is committed
 # and the NPM_TOKEN secret exists.

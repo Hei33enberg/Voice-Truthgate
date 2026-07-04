@@ -1,13 +1,13 @@
 {
-  "name": "voicecheck-monorepo",
+  "name": "voice-truthgate-monorepo",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "VoiceCheck by mosADD — honest, on-device voice-deepfake detection (MIT).",
-  "homepage": "https://mosadd.com/voicecheck",
+  "description": "Voice Truthgate by mosADD — honest, on-device voice-deepfake detection (MIT).",
+  "homepage": "https://mosadd.com/voice-truthgate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hei33enberg/voicecheck.git"
+    "url": "https://github.com/Hei33enberg/voice-truthgate.git"
   },
   "license": "MIT",
   "workspaces": [
@@ -15,7 +15,7 @@
     "examples/node-quickcheck"
   ],
   "scripts": {
-    "build": "npm run build -w @mosadd/threat-engine && npm run build -w @mosadd/detection-sdk && npm run build -w @mosadd/voice-analyzer-core && npm run build -w @mosadd/voicecheck",
+    "build": "npm run build -w @mosadd/threat-engine && npm run build -w @mosadd/detection-sdk && npm run build -w @mosadd/voice-analyzer-core && npm run build -w @mosadd/voice-truthgate",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "example": "npm run start --workspace examples/node-quickcheck",

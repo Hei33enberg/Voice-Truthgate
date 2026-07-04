@@ -1,5 +1,5 @@
 /**
- * VoiceCheck — Node quick-check demo (and CI smoke test).
+ * Voice Truthgate — Node quick-check demo (and CI smoke test).
  *
  * No audio files needed: we deterministically synthesize a "human-like" and a
  * "synthetic-like" signal, run them through the on-device heuristic, and print
@@ -11,7 +11,7 @@
  * output shape. Real accuracy comes from pairing in a trained model (see the
  * browser example and the model card).
  */
-import { analyzeVoiceCheck } from "@mosadd/voicecheck";
+import { analyzeVoiceTruthgate } from "@mosadd/voice-truthgate";
 import {
   synthesizeHumanPolish,
   synthesizeElevenLabsLikeSynth,
@@ -27,7 +27,7 @@ const EMOJI: Record<string, string> = {
 };
 
 async function check(name: string, samples: Float32Array) {
-  const r = await analyzeVoiceCheck({ samples, sampleRate: SAMPLE_RATE });
+  const r = await analyzeVoiceTruthgate({ samples, sampleRate: SAMPLE_RATE });
   const dot = EMOJI[r.band.id] ?? "•";
   console.log(
     `${dot}  ${name.padEnd(22)}  ${r.band.label.padEnd(18)}  score=${r.confidence.toFixed(2)}  (${r.detectorId})`,
@@ -36,7 +36,7 @@ async function check(name: string, samples: Float32Array) {
 }
 
 async function main() {
-  console.log("VoiceCheck — on-device heuristic quick-check\n");
+  console.log("Voice Truthgate — on-device heuristic quick-check\n");
   console.log("  (synthesized signals, not real audio — Stage 1 heuristic triage only)\n");
 
   const human = await check("human-like clip", synthesizeHumanPolish("demo-human"));

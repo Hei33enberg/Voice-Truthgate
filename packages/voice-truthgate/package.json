@@ -1,7 +1,7 @@
 {
-  "name": "@mosadd/voicecheck",
+  "name": "@mosadd/voice-truthgate",
   "version": "0.1.0-alpha.0",
-  "description": "VoiceCheck by mosADD — honest, on-device voice-deepfake detection. On-device heuristic triage + an injectable server-confirmation detector, fused into a confidence BAND (never a bare verdict).",
+  "description": "Voice Truthgate by mosADD — honest, on-device voice-deepfake detection. On-device heuristic triage + an injectable server-confirmation detector, fused into a confidence BAND (never a bare verdict).",
   "keywords": [
     "deepfake",
     "deepfake-detection",
@@ -32,11 +32,11 @@
   },
   "license": "MIT",
   "author": "mosADD",
-  "homepage": "https://mosadd.com/voicecheck",
+  "homepage": "https://mosadd.com/voice-truthgate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hei33enberg/voicecheck.git",
-    "directory": "packages/voicecheck"
+    "url": "https://github.com/Hei33enberg/voice-truthgate.git",
+    "directory": "packages/voice-truthgate"
   },
   "publishConfig": {
     "access": "public"

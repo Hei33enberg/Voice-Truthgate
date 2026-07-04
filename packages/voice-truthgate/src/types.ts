@@ -31,10 +31,10 @@ export interface ConfidenceBand {
 }
 
 /**
- * The public result of a VoiceCheck analysis. Deliberately band-first; the raw
+ * The public result of a Voice Truthgate analysis. Deliberately band-first; the raw
  * `confidence` is included for tooling but the UI should lead with `band`.
  */
-export interface VoiceCheckResult {
+export interface VoiceTruthgateResult {
   /** False when no detector could produce a verdict (fail-open) — treat as "unknown", never "authentic". */
   available: boolean;
   /** 0..1 "looks synthetic" score from the top detector (0 when unavailable). */

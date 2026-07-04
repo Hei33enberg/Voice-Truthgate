@@ -2,7 +2,7 @@
 
 A tiny, pluggable detection pipeline. Defines the `Detector`, `Signal` and `Verdict`
 interfaces plus a `runDetectors` runner with **fail-open** semantics. It's the frame
-[`@mosadd/voicecheck`](../voicecheck) plugs its detectors into — but it's detector-agnostic,
+[`@mosadd/voice-truthgate`](../voice-truthgate) plugs its detectors into — but it's detector-agnostic,
 so you can build any classifier pipeline on it (voice, text, anomaly, watermark, …).
 
 **License:** MIT. See `LICENSE` in this package.

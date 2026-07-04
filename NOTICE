@@ -1,4 +1,4 @@
-VoiceCheck by mosADD
+Voice Truthgate by mosADD
 Copyright (c) 2026 mosADD
 
 This product is licensed under the MIT License (see LICENSE). All four packages
@@ -26,4 +26,4 @@ on explicit opt-in:
   https://huggingface.co/as1605/Deepfake-audio-detection-V2
 
 The confidence-band design and the "signal, not a verdict" framing are part of
-the VoiceCheck SDK (MIT).
+the Voice Truthgate SDK (MIT).

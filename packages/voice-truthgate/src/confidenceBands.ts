@@ -3,7 +3,7 @@ import type { ConfidenceBand } from "./types";
 /**
  * The mandatory disclaimer. Detection is probabilistic and imperfect — modern
  * TTS can pass, and real (compressed / noisy / distressed) speech can trip the
- * detector. This string MUST be rendered next to every VoiceCheck result and
+ * detector. This string MUST be rendered next to every Voice Truthgate result and
  * returned by every API response. See MODEL_CARD.md.
  */
 export const SIGNAL_NOT_VERDICT_DISCLAIMER =

@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Try VoiceCheck live
-    url: https://mosadd.com/voicecheck
+  - name: Try Voice Truthgate live
+    url: https://mosadd.com/voice-truthgate
     about: Use the hosted, on-device checker.
   - name: Security vulnerability
-    url: https://github.com/Hei33enberg/voicecheck/blob/main/SECURITY.md
+    url: https://github.com/Hei33enberg/voice-truthgate/blob/main/SECURITY.md
     about: Please report security issues privately — do not open a public issue.

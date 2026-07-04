@@ -1,21 +1,23 @@
 <div align="center">
 
-# VoiceCheck by mosADD
+# Voice Truthgate by mosADD
+
+*(formerly VoiceCheck)*
 
 ### Is this voice real or AI? Honest, on-device, MIT.
 
-[![CI](https://github.com/Hei33enberg/voicecheck/actions/workflows/ci.yml/badge.svg)](https://github.com/Hei33enberg/voicecheck/actions/workflows/ci.yml)
+[![CI](https://github.com/Hei33enberg/voice-truthgate/actions/workflows/ci.yml/badge.svg)](https://github.com/Hei33enberg/voice-truthgate/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-informational.svg)](./LICENSE)
 [![Privacy: on-device](https://img.shields.io/badge/privacy-on--device-brightgreen.svg)](#privacy--on-device-by-design)
-[![Try it live](https://img.shields.io/badge/try%20it-live-8A2BE2.svg)](https://mosadd.com/voicecheck)
+[![Try it live](https://img.shields.io/badge/try%20it-live-8A2BE2.svg)](https://mosadd.com/voice-truthgate)
 
 A small, honest toolkit for **voice-deepfake / synthetic-speech detection** that runs
 **in the browser** — your audio never leaves your device. It never gives you a bare
 "REAL / FAKE". It gives you a **confidence band** and a plain disclaimer, because
 getting this wrong about a real person is harmful.
 
-**[▶ Try it live at mosadd.com/voicecheck](https://mosadd.com/voicecheck)** &nbsp;·&nbsp;
-[How it works](https://mosadd.com/voicecheck/how-it-works) &nbsp;·&nbsp;
+**[▶ Try it live at mosadd.com/voice-truthgate](https://mosadd.com/voice-truthgate)** &nbsp;·&nbsp;
+[How it works](https://mosadd.com/voice-truthgate/how-it-works) &nbsp;·&nbsp;
 [Model card](https://mosadd.com/model-card)
 
 </div>
@@ -25,7 +27,7 @@ getting this wrong about a real person is harmful.
 ## Why this exists
 
 The whole voice-AI industry races to **generate** speech; almost nobody ships a good,
-free tool to **detect** it. VoiceCheck is that tool — and it's deliberately built to be
+free tool to **detect** it. Voice Truthgate is that tool — and it's deliberately built to be
 *honest* about its own limits rather than confidently wrong.
 
 - 🔒 **On-device.** Both checks run in your browser. There's no account and no server in
@@ -39,10 +41,10 @@ free tool to **detect** it. VoiceCheck is that tool — and it's deliberately bu
 ## 60-second quickstart
 
 ```ts
-import { analyzeVoiceCheck } from "@mosadd/voicecheck";
+import { analyzeVoiceTruthgate } from "@mosadd/voice-truthgate";
 
 // Decode your audio to mono PCM (a Float32Array), e.g. at 16 kHz.
-const result = await analyzeVoiceCheck({ samples, sampleRate: 16000 });
+const result = await analyzeVoiceTruthgate({ samples, sampleRate: 16000 });
 
 console.log(result.band.label);  // "Likely authentic" | "Uncertain" | "Likely synthetic"
 console.log(result.confidence);  // 0..1 — lead with the band, not this number
@@ -54,14 +56,14 @@ never hard-codes an endpoint or keys, and it **fails open** (if the model is unr
 the on-device band still stands, and never silently becomes "authentic"):
 
 ```ts
-import { analyzeVoiceCheck, createHeuristicDetector, createServerDetector } from "@mosadd/voicecheck";
+import { analyzeVoiceTruthgate, createHeuristicDetector, createServerDetector } from "@mosadd/voice-truthgate";
 
 const server = createServerDetector({
   analyze: async (payload) => callYourModel(payload), // → { confidence, modelVersion }
   version: "your-model-v1",
 });
 
-const result = await analyzeVoiceCheck(
+const result = await analyzeVoiceTruthgate(
   { samples, sampleRate: 16000 },
   { detectors: [createHeuristicDetector(), server] },
 );
@@ -119,7 +121,7 @@ the SDK stays infrastructure-free.
 
 | Package | Role |
 |---|---|
-| [`@mosadd/voicecheck`](./packages/voicecheck) | The brains — fuses the stages into an honest band and always attaches the disclaimer. |
+| [`@mosadd/voice-truthgate`](./packages/voice-truthgate) | The brains — fuses the stages into an honest band and always attaches the disclaimer. |
 | [`@mosadd/voice-analyzer-core`](./packages/voice-analyzer-core) | Stage 1: the instant, pure-DSP on-device heuristic. |
 | [`@mosadd/detection-sdk`](./packages/detection-sdk) | Pluggable `Detector` / `Verdict` frame + fail-open `runDetectors`. |
 | [`@mosadd/threat-engine`](./packages/threat-engine) | Shared severity/scoring primitives (transitive dependency). |
@@ -146,12 +148,12 @@ This is a **signal**, and we want you to know exactly what it is and isn't:
 
 The public checker has nowhere to send your audio: Stage 1 and the opt-in Stage 2 both run
 locally. The SDK ships **no** transport and **no** endpoint. A server model is something you
-*inject* — and even then, VoiceCheck sends nothing on its own.
+*inject* — and even then, Voice Truthgate sends nothing on its own.
 
 ## Why mosADD built this
 
 mosADD is building an agent-to-agent messenger where knowing whether a voice is a person or
-a synthetic is a real safety question. VoiceCheck is the open, honest, public face of that
+a synthetic is a real safety question. Voice Truthgate is the open, honest, public face of that
 work — a useful utility that reflects what mosADD stands for: **privacy and honesty**. Learn
 more at **[mosadd.com](https://mosadd.com)**.
 
