@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VoiceCheck — browser demo</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5;
+      }
+      h1 { margin-bottom: 0.25rem; }
+      .sub { opacity: 0.7; margin-top: 0; }
+      .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 1.25rem 0; }
+      button, input[type=file] { font: inherit; }
+      button {
+        padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid currentColor;
+        background: transparent; cursor: pointer;
+      }
+      button:disabled { opacity: 0.4; cursor: not-allowed; }
+      #status { min-height: 1.5rem; opacity: 0.8; font-size: 0.9rem; }
+      .band { border: 1px solid; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+      .band-head { font-size: 1.25rem; font-weight: 700; }
+      .band-desc { margin: 0.4rem 0; }
+      .band-meta { font-size: 0.85rem; opacity: 0.7; }
+      .band-likely-authentic { border-color: #16a34a; }
+      .band-uncertain { border-color: #ca8a04; }
+      .band-likely-synthetic { border-color: #dc2626; }
+      #disclaimer {
+        font-size: 0.85rem; opacity: 0.85; border-left: 3px solid currentColor;
+        padding-left: 0.75rem; margin-top: 1.5rem;
+      }
+      .note { font-size: 0.8rem; opacity: 0.6; margin-top: 1rem; }
+      a { color: inherit; }
+    </style>
+  </head>
+  <body>
+    <h1>VoiceCheck</h1>
+    <p class="sub">Is this voice real or AI? Honest, on-device. Your audio never leaves your browser.</p>
+
+    <div class="controls">
+      <button id="record">● Record</button>
+      <input id="file" type="file" accept="audio/*" />
+    </div>
+
+    <div id="status">Record or upload a short clip to get an instant band.</div>
+    <div id="result"></div>
+
+    <div class="controls">
+      <button id="strong" disabled>Run the stronger AI check (downloads a model once)</button>
+    </div>
+
+    <div id="disclaimer"></div>
+
+    <p class="note">
+      This is a demo. The instant check is a minimal illustrative heuristic — the real one lives in
+      <code>@mosadd/voice-analyzer-core</code>. The stronger check downloads a real model
+      (<code>as1605/Deepfake-audio-detection-V2</code>, ~379&nbsp;MB) and runs it in your browser.
+      See the <a href="https://github.com/Hei33enberg/voicecheck">repository</a> and each package's model card.
+    </p>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

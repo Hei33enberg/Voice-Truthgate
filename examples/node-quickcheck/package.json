@@ -1,0 +1,17 @@
+{
+  "name": "@mosadd/example-node-quickcheck",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Runnable VoiceCheck demo + CI smoke test — deterministic synthesized human-vs-synthetic voices, no audio files needed.",
+  "scripts": {
+    "start": "tsx index.ts"
+  },
+  "dependencies": {
+    "@mosadd/voicecheck": "0.1.0-alpha.0",
+    "@mosadd/voice-analyzer-core": "0.1.0-alpha.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

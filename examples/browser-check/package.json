@@ -1,0 +1,19 @@
+{
+  "name": "@mosadd/example-browser-check",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser demo: mic/file → decode 16 kHz → instant heuristic band → opt-in on-device model. Self-contained; not part of the workspace install.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0"
+  }
+}

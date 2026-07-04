@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.turbo/
+.vite/
+.cache/
+
+# Local env / editor
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+
+# Downloaded models / large local assets (never commit these)
+*.onnx
+models/
+.hf-cache/

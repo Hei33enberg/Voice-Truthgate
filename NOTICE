@@ -1,0 +1,27 @@
+VoiceCheck by mosADD
+Copyright (c) 2026 mosADD
+
+This product is licensed under the MIT License (see LICENSE). All four packages
+under packages/* are MIT-licensed.
+
+================================================================================
+Third-party notices
+================================================================================
+
+Nothing third-party is bundled in this repository. The items below are fetched
+by the user's browser at runtime, only in the optional browser example and only
+on explicit opt-in:
+
+- Transformers.js  (npm: @huggingface/transformers)  —  Apache License 2.0
+  https://github.com/huggingface/transformers.js
+  The on-device inference runtime used by examples/browser-check to run a model
+  in the browser.
+
+- Deepfake-audio-detection-V2  (as1605/Deepfake-audio-detection-V2)
+  A wav2vec2 audio-classification model hosted on Hugging Face, referenced by
+  examples/browser-check as the opt-in "stronger check". It is downloaded by the
+  user's browser on request and is NOT redistributed in this repository.
+  https://huggingface.co/as1605/Deepfake-audio-detection-V2
+
+The confidence-band design and the "signal, not a verdict" framing are part of
+the VoiceCheck SDK (MIT).

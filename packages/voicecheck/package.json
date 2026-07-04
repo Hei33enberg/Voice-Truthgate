@@ -1,0 +1,48 @@
+{
+  "name": "@mosadd/voicecheck",
+  "version": "0.1.0-alpha.0",
+  "description": "VoiceCheck by mosADD — honest, on-device voice-deepfake detection. On-device heuristic triage + an injectable server-confirmation detector, fused into a confidence BAND (never a bare verdict).",
+  "keywords": [
+    "deepfake",
+    "deepfake-detection",
+    "voice",
+    "audio",
+    "ai-safety",
+    "on-device",
+    "synthetic-speech",
+    "voice-clone",
+    "transformers-js"
+  ],
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "license": "MIT",
+  "author": "mosADD",
+  "homepage": "https://mosadd.com/voicecheck",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hei33enberg/voicecheck.git",
+    "directory": "packages/voicecheck"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "MODEL_CARD.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@mosadd/detection-sdk": "0.1.0-alpha.0",
+    "@mosadd/voice-analyzer-core": "0.1.0-alpha.0",
+    "@mosadd/threat-engine": "0.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "voicecheck-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "VoiceCheck by mosADD — honest, on-device voice-deepfake detection (MIT).",
+  "homepage": "https://mosadd.com/voicecheck",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hei33enberg/voicecheck.git"
+  },
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "examples/node-quickcheck"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "example": "npm run start --workspace examples/node-quickcheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^4.0.18"
+  }
+}

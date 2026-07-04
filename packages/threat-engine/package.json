@@ -1,0 +1,38 @@
+{
+  "name": "@mosadd/threat-engine",
+  "version": "0.1.0",
+  "description": "Deterministic threat scoring + severity/action primitives. Small and dependency-free — the shared severity/signal types the detection SDK builds on.",
+  "keywords": [
+    "threat",
+    "scoring",
+    "severity",
+    "ai-safety",
+    "deterministic"
+  ],
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "license": "MIT",
+  "author": "mosADD",
+  "homepage": "https://mosadd.com/voicecheck",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hei33enberg/voicecheck.git",
+    "directory": "packages/threat-engine"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  }
+}
