@@ -18,6 +18,9 @@ import {
 
 const TARGET_SR = 16000;
 const MODEL_ID = "as1605/Deepfake-audio-detection-V2";
+// Pin a specific model revision so a future re-label/update can't silently change
+// behaviour (supply-chain hygiene — as1605 is itself a fork of MelodyMachine/…).
+const MODEL_REVISION = "3aeb18add053e945dc69025147afab0d70fa0188";
 
 const els = {
   file: document.getElementById("file") as HTMLInputElement,
@@ -129,7 +132,7 @@ els.strong.addEventListener("click", async () => {
     if (!classifier) {
       setStatus("Downloading the model once (~379 MB) — this runs entirely in your browser…");
       const { pipeline } = await import("@huggingface/transformers");
-      classifier = (await pipeline("audio-classification", MODEL_ID)) as unknown as typeof classifier;
+      classifier = (await pipeline("audio-classification", MODEL_ID, { revision: MODEL_REVISION })) as unknown as typeof classifier;
     }
     setStatus("Running the stronger AI check on-device…");
     const out = await classifier!(currentPcm);

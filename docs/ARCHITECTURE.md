@@ -138,9 +138,11 @@ Requires Node 20+.
 
 ```bash
 npm install          # set up the workspaces
+npm run build        # tsup: build dist (ESM + CJS + types) for all packages — run first
 npm run typecheck    # tsc --noEmit across all packages
 npm test             # vitest across all packages
 npm run example      # deterministic Node quick-check (human → green-ish, synthetic → red-ish)
+# (npm run verify runs build → typecheck → test → example in order)
 ```
 
 - **`npm run example`** synthesizes a human-like and a synthetic-like clip and prints their

@@ -18,9 +18,11 @@ on explicit opt-in:
   in the browser.
 
 - Deepfake-audio-detection-V2  (as1605/Deepfake-audio-detection-V2)
-  A wav2vec2 audio-classification model hosted on Hugging Face, referenced by
-  examples/browser-check as the opt-in "stronger check". It is downloaded by the
-  user's browser on request and is NOT redistributed in this repository.
+  A wav2vec2 audio-classification model hosted on Hugging Face (id2label
+  {0:"fake",1:"real"}), a fork of MelodyMachine/Deepfake-audio-detection-V2.
+  Referenced by examples/browser-check as the opt-in "stronger check", pinned to
+  revision 3aeb18add053e945dc69025147afab0d70fa0188. It is downloaded by the user's
+  browser on request and is NOT redistributed in this repository.
   https://huggingface.co/as1605/Deepfake-audio-detection-V2
 
 The confidence-band design and the "signal, not a verdict" framing are part of

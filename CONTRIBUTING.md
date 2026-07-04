@@ -30,14 +30,25 @@ Requires Node 20+.
 
 ```bash
 npm install          # install workspaces
+npm run build        # tsup: build dist (ESM + CJS + .d.ts) for all packages — run this FIRST
 npm run typecheck    # tsc --noEmit across all packages
 npm test             # vitest across all packages
 npm run example      # run the deterministic Node quick-check demo
+# or all of the above in order:
+npm run verify
 ```
 
-- Packages ship raw TypeScript from `src/` (no build step yet) — imports resolve to
-  `src/index.ts`.
-- Add tests next to the code in `src/__tests__`. Please keep new behavior covered.
+- **Build first.** The packages publish a real `dist/` (ESM + CJS + type declarations via
+  `tsup`), and cross-package imports resolve to `dist`, so `typecheck`, `test`, and `example`
+  expect `npm run build` to have run. `npm run verify` does the whole sequence.
+- Source lives in `src/`; add tests next to the code in `src/__tests__`. Please keep new
+  behavior covered.
+
+## Releasing (maintainers)
+
+Versioning is managed by [changesets](./.changeset/README.md). Add a changeset with
+`npm run changeset`. Releases are **deliberate**: bump with `npm run version-packages`, commit,
+then run the **Release** GitHub Action manually. `npm publish` never runs automatically.
 
 ## Reporting bugs
 

@@ -15,12 +15,19 @@
     "examples/node-quickcheck"
   ],
   "scripts": {
+    "build": "npm run build -w @mosadd/threat-engine && npm run build -w @mosadd/detection-sdk && npm run build -w @mosadd/voice-analyzer-core && npm run build -w @mosadd/voicecheck",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "example": "npm run start --workspace examples/node-quickcheck"
+    "example": "npm run start --workspace examples/node-quickcheck",
+    "verify": "npm run build && npm run typecheck && npm test && npm run example",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "@types/node": "^20.14.0",
+    "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^4.0.18"

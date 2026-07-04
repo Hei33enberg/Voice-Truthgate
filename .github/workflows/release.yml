@@ -1,0 +1,50 @@
+name: Release
+
+# Deliberate, manual-only publish. VoiceCheck must NOT publish an accuracy-bearing
+# tool before its benchmark, so this never fires automatically on push. A maintainer
+# triggers it (Actions -> Release -> Run workflow) once a version bump is committed
+# and the NPM_TOKEN secret exists.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # npm provenance (sigstore)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
+    steps:
+      - name: Guard — require NPM_TOKEN
+        if: env.HAS_NPM_TOKEN != 'true'
+        run: |
+          echo "::error::NPM_TOKEN secret is not set. Add it in repo Settings -> Secrets before releasing."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck + test (gate the release)
+        run: |
+          npm run typecheck
+          npm test
+
+      - name: Publish to npm (changesets, with provenance)
+        run: npx changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
