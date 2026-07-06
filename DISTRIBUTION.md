@@ -28,6 +28,10 @@ in mosADD-OS, then re-run *Publish to MCP Registry* here.
 | **OpenAPI spec** (GPT Action / any tool) | ✅ [openapi.yaml](./docs/openapi.yaml) | import URL for a Custom GPT Action |
 | **Vercel AI SDK example** | ✅ recipe (createMCPClient) | optional: PR an example to `vercel/ai/examples` |
 | **GitHub discovery / SEO** | ✅ | repo topics: `mcp-server`, `voice-authentication`, `ai-agents` |
+| **Privacy policy** (store entry requirement) | ✅ live | [mosadd.com/privacy](https://mosadd.com/privacy) — voice/biometric data |
+| **Reviewer demo** (public key + clips) | ✅ [examples/demo-enroll-verify](./examples/demo-enroll-verify/) | enrol → verify → 401 in ~1 min |
+| **OpenAI Custom GPT config** | ✅ [OPENAI-GPT-SETUP.md](./docs/OPENAI-GPT-SETUP.md) | paste-ready; founder clicks Create |
+| **xAI Voice Agent Builder recipe** | ✅ [USE-IN-YOUR-AGENT.md](./docs/USE-IN-YOUR-AGENT.md#xai-voice-agent-builder-grok-voice) | REST tool now; remote-MCP on roadmap |
 
 ## Owner-gated (needs a founder account / partnership / review) — with exact steps
 
@@ -40,20 +44,24 @@ the rest is checklisted below.
    (voice data: what's collected/retention/processing/contact); **tool annotations**
    (verify/list = readOnly, enroll/delete = destructive); a **demo account + test key + pre-enrolled
    subject**; 3–5 screenshots. *Submit:* Claude.ai → Org Settings → Connectors → Submit. Review 2–6 wks.
-2. **OpenAI GPT Store** — create a Custom GPT in the mosADD OpenAI account, add the Action (import
-   `openapi.yaml`), set **public**, publish. Free, ~48–72h review. (Partner Marketplace = higher bar,
-   `partnerships@openai.com`, needs a security/GDPR review.)
+2. **OpenAI GPT Store** — **config is ready** ([OPENAI-GPT-SETUP.md](./docs/OPENAI-GPT-SETUP.md)): create
+   the Custom GPT in the mosADD OpenAI account (paste name/description/instructions, Import the Action
+   from `openapi.yaml`, set the demo key), publish **public**. Free, ~1–3 day review. (Partner
+   Marketplace = higher bar, `partnerships@openai.com`, needs a security/GDPR review.)
 3. **Vercel Marketplace / Templates** — email `partnerships@vercel.com` (mention the npm package + MCP
    registry listing). Optional: submit a Next.js reference template at `vercel.com/templates/submit`.
 4. **Claude Desktop Extension (`.mcpb`)** — one-click install for non-technical users; needs an
    `@anthropic-ai/mcpb`-built bundle + an icon. Low effort, self-serve.
 
 ### What the founder needs to provide (unblocks the gated channels)
-- A **privacy policy** page for voice/biometric data (`mosadd.com/privacy`).
-- A **demo/test account + a test API key** with a pre-enrolled subject (for reviewers).
-- Go-ahead to create the **Custom GPT** in the mosADD OpenAI org (I'll supply the Action config).
-- The branded **`api.mosadd.com`** (helps every listing look production-grade — separate task, gated
-  on the Supabase custom-domain add-on).
+- ✅ ~~privacy policy page~~ — **done**, live at `mosadd.com/privacy`.
+- ✅ ~~demo/test key + pre-enrolled subject~~ — **done**, `examples/demo-enroll-verify/` (public demo key,
+  subject `demo-speaker`, synthetic clips).
+- ✅ ~~Custom GPT Action config~~ — **done**, `docs/OPENAI-GPT-SETUP.md`. Founder just **creates + publishes
+  the GPT** in the mosADD OpenAI org (2 min; org login is the only step I can't do).
+- Optional, still owner-gated: the `privacy@mosadd.com` mailbox alias; a **remote HTTPS MCP endpoint** +
+  3–5 screenshots for the **Claude Connectors Directory**; the branded **`api.mosadd.com`** (Supabase
+  custom-domain add-on — makes every listing look production-grade).
 
 ## Sequencing
 1. **Now (self-serve):** MCP Registry publish · recipes + OpenAPI live · repo SEO. *(this PR)*

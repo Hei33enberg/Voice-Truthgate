@@ -92,8 +92,27 @@ const res = await fetch("$VTG_URL", {
 const verdict = await res.json(); // { verdict, confidence_band, synthetic_caution, disclaimer, ... }
 ```
 
+## xAI Voice Agent Builder (Grok Voice)
+
+xAI's [Voice Agent Builder](https://x.ai/voice) lets an agent **wire your APIs** and **connect MCP
+servers** — so a Grok voice agent can check a caller's voice before a high-stakes action. Two paths:
+
+- **REST tool (works today):** add a custom tool that POSTs the captured caller audio to
+  `…/voice-truthgate-api` with `action=verify` + the `X-API-Key` header, then gate the sensitive step on
+  the returned `verdict` / `confidence_band`. Because a match is a *signal, not a verdict* (a clone can
+  match), always pair it with a short **liveness/challenge** step for anything high-stakes.
+- **MCP:** our server is stdio today (`npx -y @mosadd/voice-truthgate-mcp`). A hosted builder that
+  "connects MCP servers" wants a **remote** MCP endpoint — that thin wrapper is on our roadmap; until it
+  lands, use the REST tool above (identical verdicts).
+
 ## LangChain / anything else
 
 Any MCP-compatible client loads it the same way (`npx -y @mosadd/voice-truthgate-mcp` + `VTG_API_KEY`),
 or call the [REST API](./VOICE-TRUTHGATE-API.md) directly. Full request/response shapes:
 [openapi.yaml](./openapi.yaml).
+
+---
+
+**Try it in 2 minutes:** a runnable enrol → verify demo with a public key + synthetic clips lives at
+[`../examples/demo-enroll-verify/`](../examples/demo-enroll-verify/). Ship a Custom GPT with
+[`OPENAI-GPT-SETUP.md`](./OPENAI-GPT-SETUP.md).
