@@ -1,0 +1,21 @@
+{
+  "name": "@mosadd/voice-truthgate-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Voice Truthgate by mosADD — enrol a voice and verify a call clip with an honest authenticity verdict, from any AI agent.",
+  "type": "module",
+  "bin": {
+    "voice-truthgate-mcp": "index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "keywords": ["mcp", "voice", "authenticity", "deepfake", "voiceprint", "mosadd"],
+  "license": "MIT"
+}
