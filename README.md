@@ -123,7 +123,12 @@ curl -X POST "$VTG_URL" -H "X-API-Key: $KEY" \
   -F action=verify -F subject_id=ceo -F audio=@incoming_call.wav
 ```
 
-Full reference: **[docs/VOICE-TRUTHGATE-API.md](./docs/VOICE-TRUTHGATE-API.md)**.
+Full reference: **[docs/VOICE-TRUTHGATE-API.md](./docs/VOICE-TRUTHGATE-API.md)** · machine-readable
+**[OpenAPI spec](./docs/openapi.yaml)** (import as an OpenAI GPT Action / any tool).
+
+> **Drop it into your stack:** copy-paste recipes for **Claude, OpenAI (GPT Action + Agents SDK),
+> Vercel AI SDK, v0, and LangChain** → **[docs/USE-IN-YOUR-AGENT.md](./docs/USE-IN-YOUR-AGENT.md)**.
+> One MCP server, every ecosystem.
 
 ---
 

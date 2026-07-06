@@ -1,0 +1,154 @@
+openapi: 3.1.0
+info:
+  title: Voice Truthgate — Market API
+  version: "1.0.0"
+  description: |
+    Honest voice authenticity as a service. Enrol the voices you want to protect, then verify a
+    call clip against a subject → a confidence-BANDED verdict (`likely_same_person` /
+    `likely_different_person` / `inconclusive` / `not_enrolled`) with a synthetic-voice caution and
+    a disclaimer. **A signal, not a verdict** — a targeted clone can match a real voiceprint (≈63%
+    in our own testing), so combine this with identity + a liveness step for high-stakes decisions.
+
+    Auth: send your customer key as the `X-API-Key` header. The raw 192-d biometric is never
+    returned. This schema is importable as an OpenAI GPT Action / any OpenAPI tool.
+
+    Note: audio is sent as `multipart/form-data`. Some agent runtimes (e.g. GPT Actions) can't
+    upload binary from a chat — for those, use the MCP server `@mosadd/voice-truthgate-mcp`
+    (which reads a local file path) or pass audio your framework has already fetched.
+  license:
+    name: MIT
+    url: https://github.com/Hei33enberg/voice-truthgate/blob/main/LICENSE
+  contact:
+    name: mosADD
+    url: https://mosadd.com/voice-truthgate
+
+servers:
+  - url: https://rooffhgbxafyjcwmwpsy.supabase.co/functions/v1
+    description: Live endpoint (a branded api.mosadd.com host is planned).
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /voice-truthgate-api:
+    post:
+      operationId: voiceTruthgate
+      summary: Enrol / verify / list / delete a subject's voiceprint
+      description: |
+        A single action-dispatched endpoint. Set the `action` form field to one of
+        `enroll` · `verify` · `subjects` · `delete`.
+        - **enroll** — `subject_id` + one or more `audio` files → store this subject's voiceprint.
+        - **verify** — `subject_id` + one `audio` file (+ optional `threshold`) → honest verdict.
+        - **subjects** — list the subjects enrolled under your key (metadata only).
+        - **delete** — `subject_id` → remove that subject's enrolment.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action:
+                  type: string
+                  enum: [enroll, verify, subjects, delete]
+                subject_id:
+                  type: string
+                  description: A stable id you choose for the enrolled person (enroll/verify/delete).
+                  example: acme-ceo
+                audio:
+                  type: string
+                  format: binary
+                  description: Audio clip(s). One for verify; one or more for enroll. Any common codec.
+                threshold:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  description: Optional cosine-similarity threshold override for verify (default 0.53).
+      responses:
+        "200":
+          description: OK — an action result (verdict / enrolment / list / deletion).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/VerifyResult"
+                  - $ref: "#/components/schemas/EnrollResult"
+                  - $ref: "#/components/schemas/SubjectsResult"
+                  - $ref: "#/components/schemas/DeleteResult"
+        "400":
+          description: Bad request (e.g. missing_subject_id, no_audio, invalid_threshold).
+          content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+        "401":
+          description: Missing or invalid API key.
+          content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+        "413":
+          description: Audio too large.
+          content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+        "502":
+          description: Engine unavailable.
+          content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    VerifyResult:
+      type: object
+      description: The honest verdict for a verify call.
+      properties:
+        ok: { type: boolean, example: true }
+        subject_id: { type: string }
+        verdict:
+          type: string
+          enum: [likely_same_person, likely_different_person, inconclusive, not_enrolled]
+        message: { type: string }
+        score: { type: number, nullable: true, description: cosine similarity to the enrolled voiceprint }
+        threshold: { type: number, nullable: true }
+        confidence: { type: number, nullable: true, description: 0..1 distance-to-threshold }
+        confidence_band: { type: string, enum: [high, medium, low, none] }
+        synthetic_caution:
+          type: boolean
+          description: True on a match — a cloned/synthetic voice can also produce it.
+        synthetic_note: { type: string }
+        duration_sec: { type: number, nullable: true }
+        disclaimer: { type: string, description: Always present — surface it next to the result. }
+    EnrollResult:
+      type: object
+      properties:
+        ok: { type: boolean }
+        enrolled: { type: boolean }
+        subject_id: { type: string }
+        clips: { type: integer }
+        total_sec: { type: number, nullable: true }
+        low_confidence: { type: boolean }
+        note: { type: string }
+    SubjectsResult:
+      type: object
+      properties:
+        ok: { type: boolean }
+        subjects:
+          type: array
+          items:
+            type: object
+            properties:
+              subject_id: { type: string }
+              model: { type: string }
+              clips: { type: integer, nullable: true }
+              total_sec: { type: number, nullable: true }
+              low_confidence: { type: boolean }
+              created_at: { type: string, format: date-time }
+              updated_at: { type: string, format: date-time }
+    DeleteResult:
+      type: object
+      properties:
+        ok: { type: boolean }
+        deleted: { type: string }
+    Error:
+      type: object
+      properties:
+        ok: { type: boolean, example: false }
+        reason: { type: string, example: invalid_api_key }

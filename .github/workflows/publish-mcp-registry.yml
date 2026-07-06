@@ -1,0 +1,38 @@
+name: Publish to MCP Registry
+
+# Publishes server.json to the official MCP Registry (registry.modelcontextprotocol.io).
+# Ownership of the io.github.hei33enberg/* namespace is proven by GitHub Actions OIDC —
+# this workflow runs in Hei33enberg/voice-truthgate, so no interactive login is needed.
+# Manual (workflow_dispatch); re-run after bumping server.json version.
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      id-token: write   # OIDC → namespace ownership proof
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mcp-publisher
+        run: |
+          set -e
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" -o mp.tar.gz \
+            && tar -xzf mp.tar.gz mcp-publisher 2>/dev/null \
+            || curl -fsSL "https://dist.mcp.sh/mcp-publisher/linux/latest" -o mcp-publisher
+          chmod +x mcp-publisher
+          ./mcp-publisher --version || true
+
+      - name: Login (GitHub Actions OIDC)
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish server.json
+        run: ./mcp-publisher publish
+
+      - name: Verify
+        run: |
+          sleep 3
+          curl -fsS "https://registry.modelcontextprotocol.io/v0/servers?search=voice-truthgate-mcp" | head -c 800 || true

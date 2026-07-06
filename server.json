@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
+  "name": "io.github.hei33enberg/voice-truthgate-mcp",
+  "description": "Honest voice authenticity for AI agents — enrol a voice, verify a call clip (is this really my contact?). Returns a confidence-banded signal, never a bare verdict.",
+  "repository": {
+    "url": "https://github.com/Hei33enberg/voice-truthgate",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@mosadd/voice-truthgate-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "VTG_API_KEY",
+          "description": "Your Voice Truthgate API key (from mosadd.com).",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
