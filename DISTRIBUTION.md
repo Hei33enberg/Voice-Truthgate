@@ -10,7 +10,7 @@ Claude, the Vercel AI SDK, v0, and the OpenAI Agents SDK.
 `registry.modelcontextprotocol.io` is the canonical, self-serve index every MCP client reads. One
 listing → discoverable in Claude, v0, the Vercel AI SDK, and OpenAI Agents SDK **at once**. Shipped in
 this repo: [`server.json`](./server.json) + a GitHub-OIDC [publish workflow](./.github/workflows/publish-mcp-registry.yml)
-(no interactive login — the `io.github.hei33enberg/*` namespace is proven by the workflow running
+(no interactive login — the `io.github.Hei33enberg/*` namespace is proven by the workflow running
 here). Re-run it after a version bump.
 
 ## What's live / self-serve (done or one action away)

@@ -1,7 +1,7 @@
 name: Publish to MCP Registry
 
 # Publishes server.json to the official MCP Registry (registry.modelcontextprotocol.io).
-# Ownership of the io.github.hei33enberg/* namespace is proven by GitHub Actions OIDC —
+# Ownership of the io.github.Hei33enberg/* namespace is proven by GitHub Actions OIDC —
 # this workflow runs in Hei33enberg/voice-truthgate, so no interactive login is needed.
 # Manual (workflow_dispatch); re-run after bumping server.json version.
 on:
