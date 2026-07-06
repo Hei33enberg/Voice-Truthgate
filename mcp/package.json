@@ -1,6 +1,7 @@
 {
   "name": "@mosadd/voice-truthgate-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "mcpName": "io.github.Hei33enberg/voice-truthgate-mcp",
   "description": "MCP server for Voice Truthgate by mosADD — enrol a voice and verify a call clip with an honest authenticity verdict, from any AI agent.",
   "type": "module",
   "bin": {
