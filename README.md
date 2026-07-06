@@ -4,41 +4,65 @@
 
 *(formerly VoiceCheck)*
 
-### Is this voice real or AI? Honest, on-device, MIT.
+### Is this really my contact — live? Honest voice authenticity. Open-core, MIT.
 
 [![CI](https://github.com/Hei33enberg/voice-truthgate/actions/workflows/ci.yml/badge.svg)](https://github.com/Hei33enberg/voice-truthgate/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-informational.svg)](./LICENSE)
+[![npm: MCP](https://img.shields.io/npm/v/@mosadd/voice-truthgate-mcp?label=%40mosadd%2Fvoice-truthgate-mcp)](https://www.npmjs.com/package/@mosadd/voice-truthgate-mcp)
 [![Privacy: on-device](https://img.shields.io/badge/privacy-on--device-brightgreen.svg)](#privacy--on-device-by-design)
+[![Part of mosADD](https://img.shields.io/badge/part%20of-mosADD-5af082)](https://github.com/Hei33enberg/mosADD-OS)
 [![Try it live](https://img.shields.io/badge/try%20it-live-8A2BE2.svg)](https://mosadd.com/voice-truthgate)
 
-A small, honest toolkit for **voice-deepfake / synthetic-speech detection** that runs
-**in the browser** — your audio never leaves your device. It never gives you a bare
-"REAL / FAKE". It gives you a **confidence band** and a plain disclaimer, because
-getting this wrong about a real person is harmful.
+Voice authenticity that's **honest about its own limits**. It never gives you a bare
+"REAL / FAKE" — it gives you a **confidence signal** and a plain disclaimer, because getting
+this wrong about a real person is harmful.
 
-**[▶ Try it live at mosadd.com/voice-truthgate](https://mosadd.com/voice-truthgate)** &nbsp;·&nbsp;
+**[▶ Try it live](https://mosadd.com/voice-truthgate)** &nbsp;·&nbsp;
 [How it works](https://mosadd.com/voice-truthgate/how-it-works) &nbsp;·&nbsp;
-[Model card](https://mosadd.com/model-card)
+[Model card](https://mosadd.com/model-card) &nbsp;·&nbsp;
+[API docs](./docs/VOICE-TRUTHGATE-API.md)
 
 </div>
 
 ---
 
-## Why this exists
+## Why "detect the deepfake" is the wrong game — and what we do instead
 
-The whole voice-AI industry races to **generate** speech; almost nobody ships a good,
-free tool to **detect** it. Voice Truthgate is that tool — and it's deliberately built to be
-*honest* about its own limits rather than confidently wrong.
+The whole voice-AI industry races to **generate** speech; almost nobody ships an honest tool
+to tell you what's real. The naïve answer — a standalone "is this audio AI?" detector — is a
+**losing game**, and we have our own numbers to prove it: on modern premium TTS, our best
+single-clip detector measured **AUC ≈ 0.61** (barely better than a coin). Anyone selling you
+"99% deepfake detection" is selling snake oil.
 
-- 🔒 **On-device.** Both checks run in your browser. There's no account and no server in
-  the loop for the public checker — the tool has nowhere to send your audio.
-- 🎚️ **A band, never a verdict.** Results are one of three confidence bands, always shown
-  with a "signal, not a verdict" disclaimer. You *cannot* accidentally surface a bare
-  boolean.
-- 📖 **MIT + open.** Four small, reusable packages. Use them commercially, fork them,
-  build your own detectors on the pipeline.
+So Voice Truthgate asks a **better, answerable** question: **"is this really my contact,
+live?"** We answer it by **fusing signals**, not by guessing at a waveform:
 
-## 60-second quickstart
+- **L0 — Identity.** *Who* is this, and are they a known human or a known agent? (An agent
+  *should* sound synthetic — that's not an alarm.)
+- **L1 — Voiceprint.** Does the voice match *this specific person's* enrolled print? Strong at
+  rejecting a **different** human (≈0% false accept in our tests, ~4.6% EER on clean speech).
+- **L2 — Acoustic.** A weak, abstain-heavy synthetic-speech signal (the on-device band below).
+- **L3 — Live rhythm.** *The un-copyable part* — see [the moat](#the-moat-fake-live-conversation-not-fake-file).
+
+Every layer is a **signal, not a verdict**, fused with the others and shipped with a
+disclaimer. We would rather abstain than be confidently wrong.
+
+### The honest proof: why voiceprint alone isn't enough
+
+We ran a **targeted-clone test** on our own voiceprint engine — clone an enrolled person, then
+try to pass as them. Result: a targeted clone was **accepted 63% of the time** at our operating
+threshold, and **no threshold** cleanly separates "a clone of you" from "you" without also
+rejecting real callers. That's not a flaw we hide — it's *the reason the product fuses identity
++ voiceprint + liveness instead of trusting the voice alone.* Voice is one signal. Never the
+whole decision.
+
+---
+
+## Three ways to use it
+
+### 1. Open SDK — on-device, MIT, zero infra
+
+The acoustic band (L2) runs **in the browser** — your audio never leaves the device.
 
 ```ts
 import { analyzeVoiceTruthgate } from "@mosadd/voice-truthgate";
@@ -51,9 +75,9 @@ console.log(result.confidence);  // 0..1 — lead with the band, not this number
 console.log(result.disclaimer);  // ALWAYS present — render it next to the result
 ```
 
-Want the trained model to weigh in too? Pass an injectable server detector — the SDK
-never hard-codes an endpoint or keys, and it **fails open** (if the model is unreachable,
-the on-device band still stands, and never silently becomes "authentic"):
+Inject your own trained model as an optional server detector — the SDK never hard-codes an
+endpoint or key, and it **fails open** (unreachable model ⇒ the on-device band still stands and
+never silently becomes "authentic"):
 
 ```ts
 import { analyzeVoiceTruthgate, createHeuristicDetector, createServerDetector } from "@mosadd/voice-truthgate";
@@ -62,116 +86,158 @@ const server = createServerDetector({
   analyze: async (payload) => callYourModel(payload), // → { confidence, modelVersion }
   version: "your-model-v1",
 });
-
-const result = await analyzeVoiceTruthgate(
-  { samples, sampleRate: 16000 },
-  { detectors: [createHeuristicDetector(), server] },
-);
+const result = await analyzeVoiceTruthgate({ samples, sampleRate: 16000 },
+  { detectors: [createHeuristicDetector(), server] });
 ```
 
-> **Note:** publishing to npm is pending (see the roadmap). For now, use these packages by
-> cloning this repo (`npm install` sets up the workspaces), or by vendoring `packages/*`.
-> Try the runnable demo with **`npm run example`**, or open `examples/browser-check` for a
-> mic/file UI.
+> The SDK packages aren't on npm yet — clone this repo (`npm install` wires the workspaces) or
+> vendor `packages/*`. Runnable demo: **`npm run example`**, or open `examples/browser-check`.
 
-## The three confidence bands
+### 2. MCP tool — give any AI agent an authenticity check
+
+Live on npm. Enrol a voice and verify a call clip **from Claude, Cursor, your own fleet — any
+MCP agent**:
+
+```bash
+npx -y @mosadd/voice-truthgate-mcp
+```
+
+```json
+{ "mcpServers": { "voice-truthgate": {
+  "command": "npx", "args": ["-y", "@mosadd/voice-truthgate-mcp"],
+  "env": { "VTG_API_KEY": "vtg_live_your_key" }
+} } }
+```
+
+Tools: `voice_truthgate_enroll`, `voice_truthgate_verify`, `voice_truthgate_list_subjects`. See
+[`mcp/`](./mcp).
+
+### 3. Market API — enrol / verify from any app
+
+For contact centres, IVRs, or any backend. Enrol the voices you protect, then verify a call
+clip against a subject → an honest banded verdict (`likely_same_person` / `likely_different_person`
+/ `inconclusive`) with a synthetic-voice caution:
+
+```bash
+curl -X POST "$VTG_URL" -H "X-API-Key: $KEY" \
+  -F action=verify -F subject_id=ceo -F audio=@incoming_call.wav
+```
+
+Full reference: **[docs/VOICE-TRUTHGATE-API.md](./docs/VOICE-TRUTHGATE-API.md)**.
+
+---
+
+## The moat: fake live *conversation*, not fake *file*
+
+A live AI impersonation runs **speech → STT → LLM → TTS** — which is **half-duplex and
+turn-based**. It categorically **cannot** reply in <~300 ms, **overlap** you, **backchannel**
+("mhm" while you talk), or interrupt mid-sentence. Humans in live conversation do all four
+constantly. **We can measure this because we own the channel's millisecond, per-speaker turn
+timing** — nobody holding only an audio file can. (In corpus analysis, *overlap rate alone*
+separates a bot pipeline from human turn-taking almost perfectly.)
+
+This is L3, and it's the un-copyable signal. It's held to the same honesty rail as everything
+else: it **only fires from a profile calibrated on real labelled turn logs** — until then it
+measures, never accuses. That calibration is the frontier we're building toward.
+
+---
+
+## The three confidence bands (L2 acoustic)
 
 | Band | Score | What it means |
 |---|---|---|
-| 🟢 **Likely authentic** | `0.00 – 0.35` | No strong synthetic-voice signals found. This does **NOT** prove the voice is real — a good deepfake can score here. |
-| 🟡 **Uncertain** | `0.35 – 0.65` | Mixed or weak signals. Treat as inconclusive; a longer, uncompressed sample and human review are recommended. |
-| 🔴 **Likely synthetic** | `0.65 – 1.00` | Signals consistent with AI-generated or cloned speech. This is **NOT** proof — verify with a human expert before acting. |
+| 🟢 **Likely authentic** | `0.00 – 0.35` | No strong synthetic-voice signals. This does **NOT** prove the voice is real — a good deepfake can score here. |
+| 🟡 **Uncertain** | `0.35 – 0.65` | Mixed / weak signals. Inconclusive; prefer a longer, uncompressed sample + human review. |
+| 🔴 **Likely synthetic** | `0.65 – 1.00` | Signals consistent with AI-generated or cloned speech. **NOT** proof — verify with a human before acting. |
 
 Every result carries this disclaimer, verbatim:
 
-> **This is a signal, not a verdict.** Automated voice-authenticity detection is
-> probabilistic and can be wrong in both directions. Do not use this result alone to
-> accuse, identify, or make legal/forensic decisions about a person.
+> **This is a signal, not a verdict.** Automated voice-authenticity detection is probabilistic
+> and can be wrong in both directions. Do not use this result alone to accuse, identify, or make
+> legal/forensic decisions about a person.
 
-## Architecture
+## Architecture (the open SDK)
 
-Two stages, both **on-device**. An optional trained model is *injected* by the host app —
-the SDK stays infrastructure-free.
+Two stages, both **on-device**; an optional trained model is *injected* by the host app.
 
 ```
         ┌──────────────── your device / browser (nothing leaves it) ────────────────┐
-        │                                                                            │
  mic /  │  record or      decode to        STAGE 1: instant heuristic                │
- file ──┼─▶ upload  ─────▶ 16 kHz mono ───▶ (pure DSP, 0 MB, default)  ──────────────┼──▶  confidence
-        │                  Float32 PCM   │                                           │     BAND
-        │                                └▶ STAGE 2: stronger model (opt-in) ─────────┼──▶  +
-        │                                   (a real classifier via transformers.js)  │     disclaimer
-        │                                                                            │
-        └────────────────────────────────────────────────────────────────────────── ┘
-                                              │
+ file ──┼─▶ upload  ─────▶ 16 kHz mono ───▶ (pure DSP, 0 MB, default)  ──────────────┼──▶ band
+        │                  Float32 PCM   └▶ STAGE 2: stronger model (opt-in) ─────────┼──▶  +
+        │                                   (a real classifier via transformers.js)  │    disclaimer
+        └──────────────────────────────────────────────────────────────────────────┘
                      (optional) injected SERVER detector — your model, your transport;
                       authoritative when it answers, FAIL-OPEN when it doesn't.
 ```
 
-- **Stage 1 — heuristic triage** (`@mosadd/voice-analyzer-core`): instant, private, no
-  download. Pure-DSP cues (spectral tilt, ZCR jitter, prosody flatness, breath pauses, F0
-  variance). A cheap floor, weak on modern TTS — a triage, not a verdict.
-- **Stage 2 — a real model, opt-in, still on-device** (`examples/browser-check`): a trained
-  wav2vec2 audio classifier run **in the browser** via `@huggingface/transformers`. When it
-  answers, its verdict is authoritative.
-- **Fusion is band-first and fails to "unknown", never to "safe".** When nothing usable
-  answers, the result is `available: false` with band `uncertain` — never `likely-authentic`.
+Fusion is **band-first and fails to "unknown", never to "safe"** — nothing usable ⇒
+`available: false`, band `uncertain`, never `likely-authentic`. Deeper design:
+[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
 ## Packages
 
 | Package | Role |
 |---|---|
-| [`@mosadd/voice-truthgate`](./packages/voice-truthgate) | The brains — fuses the stages into an honest band and always attaches the disclaimer. |
+| [`@mosadd/voice-truthgate`](./packages/voice-truthgate) | The brains — fuses the stages into an honest band, always attaches the disclaimer. |
 | [`@mosadd/voice-analyzer-core`](./packages/voice-analyzer-core) | Stage 1: the instant, pure-DSP on-device heuristic. |
 | [`@mosadd/detection-sdk`](./packages/detection-sdk) | Pluggable `Detector` / `Verdict` frame + fail-open `runDetectors`. |
 | [`@mosadd/threat-engine`](./packages/threat-engine) | Shared severity/scoring primitives (transitive dependency). |
+| [`@mosadd/voice-truthgate-mcp`](./mcp) | **On npm** — the MCP server (enrol/verify tools for AI agents). |
 
 ## Honesty — the caveats, stated plainly
 
-This is a **signal**, and we want you to know exactly what it is and isn't:
-
-- **Accuracy is not yet benchmarked** on real human-vs-cloned voice pairs. Treat current
-  behavior as a demonstrator, not a measured system.
-- **The field has a ceiling.** No open detector reliably beats roughly **~85% on unseen,
-  modern premium TTS** (e.g. the latest ElevenLabs). That number is a rough field ceiling
-  for framing — **not** a spec or a claim about this tool. False negatives happen.
-- **Codec compression is the #1 accuracy killer** (Opus / MP3 / telephony, −10–40%). Real
-  phone / VPN / Zoom audio is compressed. Prefer uploaded, less-compressed clips.
-- **The opt-in Stage-2 model is large** — ~379 MB, unquantized (downloaded once, then
-  cached). Shrinking it is on the roadmap.
-- **Short, noisy, or distressed real speech** raises false positives; accuracy varies by
-  language and accent.
-- **npm publish is pending.** Packages are made publish-*ready*; they are not on npm yet.
+- **Standalone detection is a losing game.** Our own single-clip detector measured **AUC ≈ 0.61**
+  on modern premium TTS. The product's value is **fusion + honesty**, not a magic detector.
+- **Voiceprint is foolable by a targeted clone** (~63% accepted in our test) → it's a signal to
+  *fuse*, never a standalone verdict. Great at rejecting a *different* human; weak against a
+  clone *of you*.
+- **Codec compression is the #1 accuracy killer** (Opus / MP3 / telephony, −10–40%). Prefer
+  uploaded, less-compressed clips.
+- **L3 live-rhythm is un-calibrated today** — it measures but does not accuse until fit on real
+  labelled turn logs (weight-zero-until-calibrated).
+- **Short, noisy, or distressed real speech** raises false positives; accuracy varies by language
+  and accent.
+- **npm:** the MCP server is published; the SDK packages are publish-*ready* but not yet on npm.
 - **Not for accusations, forensics, or legal decisions.** See each package's `MODEL_CARD.md`.
 
 ## Privacy — on-device by design
 
-The public checker has nowhere to send your audio: Stage 1 and the opt-in Stage 2 both run
-locally. The SDK ships **no** transport and **no** endpoint. A server model is something you
-*inject* — and even then, Voice Truthgate sends nothing on its own.
+The public checker has nowhere to send your audio: Stage 1 and the opt-in Stage 2 run locally.
+The SDK ships **no** transport and **no** endpoint. A server model (or the market API) is
+something you *opt into*; the SDK sends nothing on its own. The market API holds enrolled
+voiceprints server-side under strict access control and returns only a **signal**, never the raw
+biometric.
 
-## Why mosADD built this
+## Part of the mosADD ecosystem
 
-mosADD is building an agent-to-agent messenger where knowing whether a voice is a person or
-a synthetic is a real safety question. Voice Truthgate is the open, honest, public face of that
-work — a useful utility that reflects what mosADD stands for: **privacy and honesty**. Learn
-more at **[mosadd.com](https://mosadd.com)**.
+Voice Truthgate is the **authenticity / trust layer** of [mosADD](https://mosadd.com) — the
+open comms stack for AI agents and the humans who direct them. It composes with:
+
+- **[mosADD-OS](https://github.com/Hei33enberg/mosADD-OS)** — the **comms layer**: E2EE DMs,
+  channels, web rooms, and email, all exposed as MCP tools (`npx -y @mosadd/mcp`). Your agents
+  talk and coordinate there; Voice Truthgate answers *"is this contact really who they claim,
+  live?"* on the same channel.
+- **[mosadd.com](https://mosadd.com)** — the product + the live checker + the in-app add-on.
+
+Both are open, both publish under the `@mosadd/*` npm scope. (mosADD-OS is Apache-2.0; this repo
+is MIT — the public authenticity SDK stays maximally permissive.)
 
 ## Roadmap
 
-- [ ] Benchmark accuracy on real ElevenLabs-vs-human pairs (the gate before any accuracy claim)
-- [ ] Quantize the Stage-2 model (~379 MB → ~95 MB)
-- [ ] Publish the packages to npm as `@mosadd/*`
-- [ ] Optional hosted "stronger check" for heavier accuracy (fail-open, stores no audio)
+- [x] Publish the MCP server to npm (`@mosadd/voice-truthgate-mcp`)
+- [ ] Publish the SDK packages to npm (`@mosadd/*`)
+- [ ] Calibrate L3 live-rhythm on real labelled turn logs (the moat — turn it from measure to trigger)
+- [ ] Threat-informed, always-fresh accuracy benchmark (per-condition numbers, no headline claim)
+- [ ] Quantize the opt-in Stage-2 model (~379 MB → ~95 MB)
 
 ## Contributing
 
-Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) and our
-[Code of Conduct](./CODE_OF_CONDUCT.md). Please keep the honesty rails intact (no bare
-verdicts, keep the disclaimer, no accuracy claims). Security reports:
-[SECURITY.md](./SECURITY.md).
+Issues and PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) and the
+[Code of Conduct](./CODE_OF_CONDUCT.md). **Keep the honesty rails intact** (no bare verdicts,
+keep the disclaimer, no accuracy claims). Security: [SECURITY.md](./SECURITY.md).
 
 ## License
 
-[MIT](./LICENSE) © mosADD. Third-party attributions (transformers.js, the referenced
-Hugging Face model) are in [NOTICE](./NOTICE).
+[MIT](./LICENSE) © mosADD. Third-party attributions (transformers.js, the referenced Hugging
+Face model) are in [NOTICE](./NOTICE).
