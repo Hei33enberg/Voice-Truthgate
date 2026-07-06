@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
   "name": "io.github.hei33enberg/voice-truthgate-mcp",
-  "description": "Honest voice authenticity for AI agents — enrol a voice, verify a call clip (is this really my contact?). Returns a confidence-banded signal, never a bare verdict.",
+  "description": "Honest voice authenticity for AI agents: enrol a voice, verify a call clip. Signal, not verdict.",
   "repository": {
     "url": "https://github.com/Hei33enberg/voice-truthgate",
     "source": "github"
