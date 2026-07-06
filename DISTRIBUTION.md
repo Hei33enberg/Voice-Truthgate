@@ -8,17 +8,22 @@ Claude, the Vercel AI SDK, v0, and the OpenAI Agents SDK.
 ## The one move that lights up everything: the MCP Registry
 
 `registry.modelcontextprotocol.io` is the canonical, self-serve index every MCP client reads. One
-listing → discoverable in Claude, v0, the Vercel AI SDK, and OpenAI Agents SDK **at once**. Shipped in
+listing → discoverable in Claude, v0, the Vercel AI SDK, and OpenAI Agents SDK **at once**.
+
+**✅ Live now:** `io.github.Hei33enberg/voice-truthgate-mcp` (status: active) —
+[query it](https://registry.modelcontextprotocol.io/v0/servers?search=voice-truthgate-mcp). Shipped in
 this repo: [`server.json`](./server.json) + a GitHub-OIDC [publish workflow](./.github/workflows/publish-mcp-registry.yml)
-(no interactive login — the `io.github.Hei33enberg/*` namespace is proven by the workflow running
-here). Re-run it after a version bump.
+(no interactive login — the `io.github.Hei33enberg/*` namespace is proven by the workflow running here).
+Ownership of the npm package is proven by the `mcpName` field in its `package.json`. To ship an update:
+bump the version in `mcp/package.json` **and** `server.json`, run *Publish Voice Truthgate MCP* (npm)
+in mosADD-OS, then re-run *Publish to MCP Registry* here.
 
 ## What's live / self-serve (done or one action away)
 
 | Channel | Status | Note |
 |---|---|---|
 | **npm** — `@mosadd/voice-truthgate-mcp` | ✅ live | `npx -y @mosadd/voice-truthgate-mcp` |
-| **Official MCP Registry** | ⚙️ workflow ready | run *Publish to MCP Registry* → canonical discovery |
+| **Official MCP Registry** | ✅ live | `io.github.Hei33enberg/voice-truthgate-mcp` — canonical cross-client discovery |
 | **Agent recipes** (Claude/OpenAI/Vercel/v0/LangChain) | ✅ [USE-IN-YOUR-AGENT.md](./docs/USE-IN-YOUR-AGENT.md) | copy-paste for each |
 | **OpenAPI spec** (GPT Action / any tool) | ✅ [openapi.yaml](./docs/openapi.yaml) | import URL for a Custom GPT Action |
 | **Vercel AI SDK example** | ✅ recipe (createMCPClient) | optional: PR an example to `vercel/ai/examples` |
