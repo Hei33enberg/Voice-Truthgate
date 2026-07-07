@@ -8,26 +8,24 @@ action (needs the mosADD org account).
 
 | Requirement | Status |
 |---|---|
-| **Remote MCP endpoint** (Streamable HTTP) | ✅ built + tested — [`../remote-mcp`](../remote-mcp). Deploy = 1 owner approval (below). |
-| **Transport** | ✅ Streamable HTTP, stateless JSON (same as `mcp.mosadd.com`). |
-| **Auth** | ✅ Bearer token — the user's own `vtg_live_…` key (they get one at mosadd.com). |
+| **Remote MCP endpoint** (HTTP) | ✅ **LIVE** — `https://rooffhgbxafyjcwmwpsy.supabase.co/functions/v1/voice-truthgate-mcp` (hosted as a Supabase Edge Function). Verified end-to-end. |
+| **Transport** | ✅ HTTP JSON-RPC (initialize / tools/list / tools/call), stateless JSON. |
+| **Auth** | ✅ Bearer token — the user's own `vtg_live_…` key (they get one at mosadd.com). Supabase passes `Authorization: Bearer` through. |
 | **Tool annotations** (readOnly / destructive) | ✅ verify + list = `readOnlyHint`; enroll = `destructiveHint`. |
 | **Privacy policy** | ✅ https://mosadd.com/privacy (voice/biometric). |
-| **HTTPS + valid cert** | ✅ via Caddy auto-TLS on deploy. |
+| **HTTPS + valid cert** | ✅ (Supabase-hosted). |
 | **Tool descriptions honest** | ✅ "signal, not verdict" + synthetic-clone caution baked into each. |
-| **Screenshots (3–5)** | ⛔ owner to capture once deployed (verify + list in a Claude chat). |
+| **Screenshots (3–5)** | ⛔ owner to capture (verify + list in a Claude chat). |
 
-## Two owner approvals to go live
-1. **DNS:** add `mcp-truthgate.mosadd.com → <box IP>` (A-record; the api.mosadd.com pattern). Until then a
-   `mcp.<ip>.sslip.io` hostname works with real TLS and no DNS change.
-2. **Deploy:** run the [`../remote-mcp`](../remote-mcp) runbook on the box (`docker build` + `docker run`
-   on `vtgnet` + one Caddy block). ~2 minutes; the existing `truthgate-api` block is untouched.
+> The endpoint is live now on the Supabase URL — **no deploy or DNS is required to submit.** A branded
+> `mcp-truthgate.mosadd.com` (or a box-hosted variant, see [`../remote-mcp`](../remote-mcp)) is an optional
+> cosmetic upgrade later.
 
-## Submit (owner)
-1. Deploy the endpoint (above); confirm the `tools/call voice_truthgate_list_subjects` handshake returns
-   JSON over HTTPS.
+## Submit (owner — the only remaining step)
+1. Sanity-check the live handshake (already verified):
+   `curl -s -X POST https://rooffhgbxafyjcwmwpsy.supabase.co/functions/v1/voice-truthgate-mcp -H "Authorization: Bearer vtg_live_…" -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"voice_truthgate_list_subjects","arguments":{}}}'`
 2. Claude.ai → **Settings → Connectors → Add custom connector / Submit to directory**.
-   - **URL:** `https://mcp-truthgate.mosadd.com/mcp`
+   - **URL:** `https://rooffhgbxafyjcwmwpsy.supabase.co/functions/v1/voice-truthgate-mcp`
    - **Auth:** API key / Bearer — users paste their `vtg_live_…` key.
    - **Privacy policy:** `https://mosadd.com/privacy`
    - **Description:** "Honest voice authenticity for your agents — enrol a voice, verify a call clip.

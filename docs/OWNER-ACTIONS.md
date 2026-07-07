@@ -6,14 +6,12 @@ logins, global-effect infra, legal). Ordered by leverage.
 ## Distribution (get us in front of users)
 1. **Create the OpenAI Custom GPT** — paste-ready config in [`OPENAI-GPT-SETUP.md`](./OPENAI-GPT-SETUP.md).
    ~2 min in the mosADD OpenAI org → publish public. (Only the org login is owner-only.)
-2. **Deploy the remote MCP endpoint** (unblocks the Claude Connectors Directory + hosted xAI/OpenAI).
-   Two global-effect approvals — run the [`../remote-mcp`](../remote-mcp) runbook outside auto mode (or
-   approve them):
-   - `docker build` + `docker run` on the truthgate box's `vtgnet` (a new public service on shared prod).
-   - DNS A-record `mcp-truthgate.mosadd.com → <box IP>` (a `mcp.<ip>.sslip.io` host works with no DNS
-     change as a bootstrap). The code is built + tested locally end-to-end.
-3. **Submit the Claude Connector** — steps + status in [`CLAUDE-CONNECTOR-SUBMISSION.md`](./CLAUDE-CONNECTOR-SUBMISSION.md).
-   Needs #2 live + 3–5 screenshots. Review ~1–2 wks.
+2. ~~Deploy the remote MCP endpoint~~ — ✅ **DONE, live now** at
+   `https://rooffhgbxafyjcwmwpsy.supabase.co/functions/v1/voice-truthgate-mcp` (hosted serverless — no box
+   or DNS needed). Verified end-to-end.
+3. **Submit the Claude Connector** — steps in [`CLAUDE-CONNECTOR-SUBMISSION.md`](./CLAUDE-CONNECTOR-SUBMISSION.md).
+   The endpoint is live, so this needs only **3–5 screenshots + clicking Submit** in Claude.ai settings.
+   Review ~1–2 wks.
 
 ## Nice-to-have infra
 4. **`privacy@mosadd.com` mailbox alias** — the privacy policy (live at mosadd.com/privacy) points to it.
