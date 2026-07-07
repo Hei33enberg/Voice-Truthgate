@@ -1,0 +1,14 @@
+{
+  "name": "@mosadd/voice-truthgate-remote-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Remote (Streamable HTTP) MCP server for Voice Truthgate — the endpoint hosted agent platforms (Claude Connectors Directory, xAI Voice Agent Builder, OpenAI Agents SDK) connect to. Per-request Bearer auth (your vtg_live_… key); audio by URL.",
+  "bin": { "voice-truthgate-remote-mcp": "server.mjs" },
+  "scripts": { "start": "node server.mjs" },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "license": "MIT"
+}

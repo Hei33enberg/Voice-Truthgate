@@ -101,9 +101,11 @@ servers** — so a Grok voice agent can check a caller's voice before a high-sta
   `…/voice-truthgate-api` with `action=verify` + the `X-API-Key` header, then gate the sensitive step on
   the returned `verdict` / `confidence_band`. Because a match is a *signal, not a verdict* (a clone can
   match), always pair it with a short **liveness/challenge** step for anything high-stakes.
-- **MCP:** our server is stdio today (`npx -y @mosadd/voice-truthgate-mcp`). A hosted builder that
-  "connects MCP servers" wants a **remote** MCP endpoint — that thin wrapper is on our roadmap; until it
-  lands, use the REST tool above (identical verdicts).
+- **MCP (remote):** a hosted builder that "connects MCP servers" wants a **remote** MCP URL. That server
+  is **built** — [`remote-mcp/`](../remote-mcp) (Streamable HTTP, stateless JSON; auth = `Authorization:
+  Bearer vtg_live_…`; `verify`/`enroll` take an audio **URL**). Point the builder at
+  `https://mcp-truthgate.mosadd.com/mcp` once it's deployed (see the runbook). Same three tools as the
+  stdio server; identical honest verdicts.
 
 ## LangChain / anything else
 
